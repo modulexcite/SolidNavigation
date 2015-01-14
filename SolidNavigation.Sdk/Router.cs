@@ -26,6 +26,10 @@ namespace SolidNavigation.Sdk {
 
         public string CreateUrl(NavigationTarget target) {
             var route = _routes.FirstOrDefault(x => x.TargetType == target.GetType());
+            if (route == null)
+            {
+                throw new Exception("Add route for NavigationTarget: " + target.GetType().Name);
+            }
             var url = Protocol + route.UrlPattern;
             var props = target.GetType().GetTypeInfo().DeclaredProperties;
             foreach (var prop in props) {

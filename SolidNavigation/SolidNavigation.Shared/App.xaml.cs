@@ -17,7 +17,8 @@ namespace SolidNavigation {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
 
-            //Router.Current.Protocol = "solidnavigation://";
+            Router.Current.Protocol = "solidnavigation://";
+            Router.Current.AddRoute("tasks/{taskid}/comments", typeof(CommentsTarget));
             Router.Current.AddRoute("tasks/{taskid}", typeof(TaskDetailsTarget));
             Router.Current.AddRoute("lists/{listid}", typeof(TaskListTarget));
             Router.Current.AddRoute("", typeof(HomeTarget));

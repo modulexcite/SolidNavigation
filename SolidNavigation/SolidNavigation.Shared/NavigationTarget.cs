@@ -31,4 +31,17 @@ namespace SolidNavigation {
             TaskId = taskId;
         }
     }
+
+    public class CommentsTarget : NavigationTarget {
+        public long TaskId {
+            get { return (long)_data["TaskId"]; }
+            set { _data["TaskId"] = value; }
+        }
+
+        public override Type PageType { get { return typeof(CommentsPage); } }
+
+        public CommentsTarget(long taskId) {
+            TaskId = taskId;
+        }
+    }
 }

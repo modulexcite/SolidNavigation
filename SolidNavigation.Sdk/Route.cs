@@ -5,8 +5,8 @@ using System.Text.RegularExpressions;
 namespace SolidNavigation.Sdk {
     [DebuggerDisplay("TargetType: {TargetType}, UrlPattern: {UrlPattern}")]
     public class Route {
-        public Route(string urlpattern, Type targeType) {
-            TargetType = targeType;
+        public Route(string urlpattern, Type targetType) {
+            TargetType = targetType;
             UrlPattern = urlpattern;
         }
         public Type TargetType { get; private set; }
