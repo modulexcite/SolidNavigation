@@ -14,10 +14,10 @@ namespace SolidNavigation.Sdk {
             _routes.Add(new Route(urlPattern, pageType));
         }
 
-        public string Protocol {
+        public string Scheme {
             get {
                 if (_protocol == null) {
-                    throw new Exception("Set routing protocol. (Router.Current.Protocol = \"myfabulousapp://\";)");
+                    throw new Exception("Set routing scheme. (Router.Current.Scheme = \"myfabulousapp://\";)");
                 }
                 return _protocol;
             }
@@ -26,11 +26,10 @@ namespace SolidNavigation.Sdk {
 
         public string CreateUrl(NavigationTarget target) {
             var route = _routes.FirstOrDefault(x => x.TargetType == target.GetType());
-            if (route == null)
-            {
+            if (route == null) {
                 throw new Exception("Add route for NavigationTarget: " + target.GetType().Name);
             }
-            var url = Protocol + route.UrlPattern;
+            var url = Scheme + route.UrlPattern;
             var props = target.GetType().GetTypeInfo().DeclaredProperties;
             foreach (var prop in props) {
                 var value = prop.GetValue(target) + "";
@@ -40,20 +39,40 @@ namespace SolidNavigation.Sdk {
         }
 
         public NavigationTarget CreateTarget(string url) {
-            var pattern = url.Replace(Protocol, "");
+            var uri = new Uri(url);
+
+
+            var pattern = url.Replace(Scheme, "");
 
             var parts = pattern.Split('?');
             var path = parts[0].TrimStart('/').TrimEnd('/');
 
+            var urlsegments = path.Split('/');
+
             var route = FindRoute(path);
 
-            var args = new object[] { };
-            if (pattern != "") {
-                var patternparts = pattern.Split('/');
-                args = new object[] { Int64.Parse(patternparts[1]) };
-            }
+            // niet met constructor doen
+            // route vinden en dan alle parameters uit de URL vissen
+
+            var cag = new List<object>();
             var cons = route.TargetType.GetTypeInfo().DeclaredConstructors.First();
-            var target = cons.Invoke(args) as NavigationTarget;
+            var ctorparams = cons.GetParameters();
+            var counter = 0;
+            for (int i = 0; i < route.Segments.Count; i++) {
+                if (route.Segments[i].IsVariable)
+                {
+                    var value = Convert.ChangeType(urlsegments[i], ctorparams[counter].ParameterType);
+                    cag.Add(value);
+                    counter++;
+                }
+            }
+
+            //var args = new object[] { };
+            //if (path != "") {
+            //    var patternparts = path.Split('/');
+            //    args = new object[] { Int64.Parse(patternparts[1]) };
+            //}
+            var target = cons.Invoke(cag.ToArray()) as NavigationTarget;
             return target;
         }
 

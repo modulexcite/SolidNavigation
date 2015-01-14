@@ -10,7 +10,7 @@ namespace SolidNavigation.Sdk {
         public override string ToString() {
             var par = "";
             foreach (var o in _data) {
-                par += o.Key + "=" + o.Value + " ";
+                par +="\nulr-param: "+ o.Key + "=" + o.Value + " ";
             }
             return GetType().Name + " " + par;
         }
