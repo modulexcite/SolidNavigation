@@ -20,7 +20,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Button Margin="30" Click="BackButton_OnClick" FontSize="30" Width="200" Content="Back"/>
-        <TextBox x:Name="AddressBox" FontSize="30" Margin="30" Grid.Column="1" />
+        <TextBox x:Name="AddressBox" Text="solidnavigation://tasks/2/comments?id=324" FontSize="30" Margin="30" Grid.Column="1" />
         <Button Width="200" Click="OnGoClick" Content="Go" FontSize="30" Grid.Column="2" Margin="30"/>
         <TextBlock x:Name="NavInfo" FontSize="20" Margin="30" Grid.Row="1" Grid.Column="1"/>
         <Frame x:Name="ContentFrame" Grid.Row="2" Margin="30" Grid.ColumnSpan="3"></Frame>

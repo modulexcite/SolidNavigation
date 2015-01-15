@@ -11,7 +11,9 @@ namespace SolidNavigation.Sdk {
 
         public void Navigate(string url) {
             var target = Router.Current.CreateTarget(url);
-            Navigate(target);
+            if (target != null) {
+                Navigate(target.PageType, url);
+            }
         }
     }
 }

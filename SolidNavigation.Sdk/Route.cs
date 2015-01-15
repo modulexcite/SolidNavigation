@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace SolidNavigation.Sdk {
@@ -14,28 +15,17 @@ namespace SolidNavigation.Sdk {
         public string UrlPattern { get; private set; }
 
         public bool IsMatch(string url) {
-            var pattern = Regex.Replace(UrlPattern, @"\{([^)]+)\}", @"([\w]*)"); // als dit niet werkt, neem dan regex van Paramnames
+            var pattern = Regex.Replace(UrlPattern, @"{(.*?)}", @"([\w]*)");
             var match = Regex.Match(url, pattern);
             return match.Success;
         }
-
-        //public List<string> ParamNames {
-        //    get {
-        //        var names = new List<string>();
-        //        var patt = new Regex(@"{(.*?)}");
-        //        foreach (Match match in patt.Matches(UrlPattern)) {
-        //            names.Add(match.Groups[1].Value);
-        //        }
-        //        return names;
-        //    }
-        //}
 
         public List<UrlSegment> Segments {
             get {
                 var segments = new List<UrlSegment>();
                 foreach (var segment in UrlPattern.Split('/')) {
                     if (segment.StartsWith("{") && segment.EndsWith("}")) {
-                        segments.Add(new UrlSegment { Segment = segment, IsVariable = true });
+                        segments.Add(new UrlSegment { Segment = segment.Replace("{","").Replace("}",""), IsVariable = true });
                     } else {
                         segments.Add(new UrlSegment { Segment = segment });
                     }
@@ -43,7 +33,7 @@ namespace SolidNavigation.Sdk {
                 return segments;
             }
         }
-    }
+     }
 
     [DebuggerDisplay("Segment: {Segment}, IsVariable: {IsVariable}")]
     public class UrlSegment {

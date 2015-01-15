@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -39,46 +40,98 @@ namespace SolidNavigation.Sdk {
         }
 
         public NavigationTarget CreateTarget(string url) {
-            var uri = new Uri(url);
+            var uriInfo = new UriInfo(url);
+            var route = FindRoute(uriInfo.Path);
 
+            var parameterValues = new List<object>();
 
-            var pattern = url.Replace(Scheme, "");
+            var cons = GetConstructor(route, uriInfo);
 
-            var parts = pattern.Split('?');
-            var path = parts[0].TrimStart('/').TrimEnd('/');
+            if (cons == null)
+            {
+                // no matching constructor for NavigationTarget
+                return null;
+            }
 
-            var urlsegments = path.Split('/');
-
-            var route = FindRoute(path);
-
-            // niet met constructor doen
-            // route vinden en dan alle parameters uit de URL vissen
-
-            var cag = new List<object>();
-            var cons = route.TargetType.GetTypeInfo().DeclaredConstructors.First();
             var ctorparams = cons.GetParameters();
             var counter = 0;
             for (int i = 0; i < route.Segments.Count; i++) {
-                if (route.Segments[i].IsVariable)
-                {
-                    var value = Convert.ChangeType(urlsegments[i], ctorparams[counter].ParameterType);
-                    cag.Add(value);
+                if (route.Segments[i].IsVariable) {
+                    var value = Convert.ChangeType(uriInfo.Segments[i], ctorparams[counter].ParameterType);
+                    parameterValues.Add(value);
                     counter++;
                 }
             }
+            foreach (var qs in uriInfo.QueryString)
+            {
+                var value = Convert.ChangeType(qs.Value, ctorparams[counter].ParameterType);
+                parameterValues.Add(value);
+                counter++;
+            }
 
-            //var args = new object[] { };
-            //if (path != "") {
-            //    var patternparts = path.Split('/');
-            //    args = new object[] { Int64.Parse(patternparts[1]) };
-            //}
-            var target = cons.Invoke(cag.ToArray()) as NavigationTarget;
+            var target = cons.Invoke(parameterValues.ToArray()) as NavigationTarget;
             return target;
+        }
+
+        private ConstructorInfo GetConstructor(Route route, UriInfo uriInfo)
+        {
+            var segments = route.Segments.Where(x => x.IsVariable).Select(x => x.Segment.ToLower()).ToList();
+            foreach (var qs in uriInfo.QueryString)
+            {
+                segments.Add(qs.Key);
+            }
+            var constructors = route.TargetType.GetTypeInfo().DeclaredConstructors;
+            foreach (var constructor in constructors) {
+                if (IsParameterMatch(constructor.GetParameters(), segments)) {
+                    return constructor;
+                }
+            }
+            return null;
+        }
+
+        private bool IsParameterMatch(ParameterInfo[] ctorParameters, List<string> parameterNames) {
+            if (ctorParameters.Count() != parameterNames.Count) {
+                return false;
+            }
+            return ctorParameters.All(ctorParameter => parameterNames.Contains(ctorParameter.Name.ToLower()));
         }
 
         private Route FindRoute(string path) {
             var route = _routes.FirstOrDefault(r => r.IsMatch(path));
             return route;
         }
+    }
+
+    [DebuggerDisplay("Path: {Path}, Segments: {Segments.Count}, QueryString: {QueryString.Count}")]
+    public class UriInfo {
+        public UriInfo(string url) {
+            var urlparts = url.Split(new[] { "://" }, StringSplitOptions.None);
+            var hierarchy = urlparts[1];
+            var pathparts = hierarchy.Split('?');
+
+            _path = pathparts[0].TrimStart('/').TrimEnd('/');
+            var pathsegments = _path.Split('/');
+            foreach (var pathsegment in pathsegments) {
+                _segments.Add(pathsegment);
+            }
+
+            if (pathparts.Length > 1) {
+                var querystring = pathparts[1];
+                var querystringparts = querystring.Split('&');
+                foreach (var querystringpart in querystringparts) {
+                    var keyvalue = querystringpart.Split('=');
+                    _queryString.Add(keyvalue[0], keyvalue[1]);
+                }
+            }
+        }
+
+        private readonly List<string> _segments = new List<string>();
+        private readonly Dictionary<string, string> _queryString = new Dictionary<string, string>();
+        private string _path;
+
+        public List<string> Segments { get { return _segments; } }
+        public Dictionary<string, string> QueryString { get { return _queryString; } }
+
+        public string Path{get { return _path; }}
     }
 }

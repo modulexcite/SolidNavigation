@@ -37,11 +37,28 @@ namespace SolidNavigation {
             get { return (long)_data["TaskId"]; }
             set { _data["TaskId"] = value; }
         }
+        public long Id {
+            get { return (long)_data["Id"]; }
+            set { _data["Id"] = value; }
+        }
+        public string hallo {
+            get { return (string)_data["hallo"]; }
+            set { _data["hallo"] = value; }
+        }
 
         public override Type PageType { get { return typeof(CommentsPage); } }
 
         public CommentsTarget(long taskId) {
             TaskId = taskId;
+        }
+        public CommentsTarget(long taskId, long id) {
+            TaskId = taskId;
+            Id = id;
+        }
+        public CommentsTarget(long taskId, long id, string hallo) {
+            TaskId = taskId;
+            Id = id;
+            this.hallo = hallo;
         }
     }
 }
