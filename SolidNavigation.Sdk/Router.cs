@@ -32,7 +32,8 @@ namespace SolidNavigation.Sdk {
             }
             var url = Scheme + route.UrlPattern;
             var props = target.GetType().GetTypeInfo().DeclaredProperties;
-            foreach (var prop in props) {
+            var routeVars = route.Segments.Where(x => x.IsVariable).Select(x => x.Segment.ToLower());
+            foreach (var prop in props.Where(x => routeVars.Contains(x.Name.ToLower()))) {
                 var value = prop.GetValue(target) + "";
                 url = url.Replace("{" + prop.Name.ToLower() + "}", value);
             }
@@ -47,8 +48,7 @@ namespace SolidNavigation.Sdk {
 
             var cons = GetConstructor(route, uriInfo);
 
-            if (cons == null)
-            {
+            if (cons == null) {
                 // no matching constructor for NavigationTarget
                 return null;
             }
@@ -62,8 +62,7 @@ namespace SolidNavigation.Sdk {
                     counter++;
                 }
             }
-            foreach (var qs in uriInfo.QueryString)
-            {
+            foreach (var qs in uriInfo.QueryString) {
                 var value = Convert.ChangeType(qs.Value, ctorparams[counter].ParameterType);
                 parameterValues.Add(value);
                 counter++;
@@ -73,11 +72,9 @@ namespace SolidNavigation.Sdk {
             return target;
         }
 
-        private ConstructorInfo GetConstructor(Route route, UriInfo uriInfo)
-        {
+        private ConstructorInfo GetConstructor(Route route, UriInfo uriInfo) {
             var segments = route.Segments.Where(x => x.IsVariable).Select(x => x.Segment.ToLower()).ToList();
-            foreach (var qs in uriInfo.QueryString)
-            {
+            foreach (var qs in uriInfo.QueryString) {
                 segments.Add(qs.Key);
             }
             var constructors = route.TargetType.GetTypeInfo().DeclaredConstructors;
@@ -132,6 +129,6 @@ namespace SolidNavigation.Sdk {
         public List<string> Segments { get { return _segments; } }
         public Dictionary<string, string> QueryString { get { return _queryString; } }
 
-        public string Path{get { return _path; }}
+        public string Path { get { return _path; } }
     }
 }
