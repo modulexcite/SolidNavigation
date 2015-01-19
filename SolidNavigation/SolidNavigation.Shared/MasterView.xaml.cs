@@ -17,7 +17,7 @@ namespace SolidNavigation {
 
         public void ShowTarget(string url) {
             var target = Router.Current.CreateTarget(url);
-            NavInfo.Text =url + "\n"+ target.ToString();
+            NavInfo.Text = url + "\n" + target;
         }
 
         private void OnGoClick(object sender, RoutedEventArgs e) {

@@ -7,44 +7,34 @@ namespace SolidNavigation {
     }
 
     public class TaskListTarget : NavigationTarget {
-        public long ListId {
-            get { return (long)_data["ListId"]; }
-            set { _data["ListId"] = value; }
-        }
+        public long ListId { get; private set; }
 
         public override Type PageType { get { return typeof(TasksPage); } }
 
         public TaskListTarget(long listId) {
             ListId = listId;
         }
+
+        public override string ToString() {
+            return base.ToString() + "\nListId=" + ListId;
+        }
     }
 
     public class TaskDetailsTarget : NavigationTarget {
-        public long TaskId {
-            get { return (long)_data["TaskId"]; }
-            set { _data["TaskId"] = value; }
-        }
-
+        public long TaskId { get; set; }
         public override Type PageType { get { return typeof(TaskDetailsPage); } }
 
         public TaskDetailsTarget(long taskId) {
             TaskId = taskId;
         }
+        public override string ToString() {
+            return base.ToString() + "\nTaskId=" + TaskId;
+        }
     }
 
     public class CommentsTarget : NavigationTarget {
-        public long TaskId {
-            get { return (long)_data["TaskId"]; }
-            set { _data["TaskId"] = value; }
-        }
-        public long Id {
-            get { return (long)_data["Id"]; }
-            set { _data["Id"] = value; }
-        }
-        public string hallo {
-            get { return (string)_data["hallo"]; }
-            set { _data["hallo"] = value; }
-        }
+        public long TaskId { get; set; }
+        public long Id { get; set; }
 
         public override Type PageType { get { return typeof(CommentsPage); } }
 
@@ -55,10 +45,9 @@ namespace SolidNavigation {
             TaskId = taskId;
             Id = id;
         }
-        public CommentsTarget(long taskId, long id, string hallo) {
-            TaskId = taskId;
-            Id = id;
-            this.hallo = hallo;
+
+        public override string ToString() {
+            return base.ToString() + "\nTaskId=" + TaskId + ", Id=" + Id;
         }
     }
 }
