@@ -7,13 +7,24 @@
     xmlns:solidNavigation="using:SolidNavigation"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ListView 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Lists" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+        </Grid>
+        <ListView Margin="120,0,0,0" Grid.Row="1"
                   SelectedItem="{Binding SelectedList, Mode=TwoWay}"
-                  ItemsSource="{Binding Lists}">
+                  ItemsSource="{Binding Lists}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Title}"  FontSize="30" />
+                    <TextBlock Text="{Binding Title}" Style="{StaticResource BodyTextBlockStyle}" FontSize="30" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

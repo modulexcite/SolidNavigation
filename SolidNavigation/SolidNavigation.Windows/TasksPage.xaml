@@ -7,13 +7,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock x:Name="pageTitle" Text="{Binding ListTitle}" Style="{StaticResource HeaderTextBlockStyle}"  
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Top" />
-        <ListView Margin="100" ItemsSource="{Binding Tasks}"  SelectedItem="{Binding SelectedTask, Mode=TwoWay}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Margin="39,59,39,0" Click="OnBackButtonClick" Style="{StaticResource NavigationBackButtonNormalStyle}" VerticalAlignment="Top" />
+            <TextBlock Text="{Binding ListTitle}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+        </Grid>
+        <ListView Margin="120,0,0,0" Grid.Row="1" ItemsSource="{Binding Tasks}"  SelectedItem="{Binding SelectedTask, Mode=TwoWay}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Title}"  FontSize="30" />
+                    <TextBlock Text="{Binding Title}" Style="{StaticResource BodyTextBlockStyle}" FontSize="30" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

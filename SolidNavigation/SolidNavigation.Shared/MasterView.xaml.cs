@@ -23,9 +23,5 @@ namespace SolidNavigation {
         private void OnGoClick(object sender, RoutedEventArgs e) {
             NavigateService.Current.Navigate(AddressBox.Text);
         }
-
-        private void BackButton_OnClick(object sender, RoutedEventArgs e) {
-            NavigateService.Current.GoBack();
-        }
     }
 }
