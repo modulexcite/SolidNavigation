@@ -13,7 +13,7 @@ namespace SolidNavigation
             Suspending += OnSuspending;
 
             Router.Current.Scheme = "solidnavigation://";
-            Router.Current.AddRoute("tasks/{taskid}/comments", typeof(CommentsPage), typeof(CommentsTarget));
+            Router.Current.AddRoute("tasks/{taskid}/comments", typeof(TaskDetailsPage), typeof(CommentsTarget));
             Router.Current.AddRoute("tasks/{taskid}", typeof(TaskDetailsPage), typeof(TaskDetailsTarget));
             Router.Current.AddRoute("lists/{listid}", typeof(TasksPage), typeof(TaskListTarget));
             Router.Current.AddRoute("", typeof(ListsPage), typeof(HomeTarget));

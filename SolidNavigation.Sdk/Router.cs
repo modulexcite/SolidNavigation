@@ -32,17 +32,6 @@ namespace SolidNavigation.Sdk
             set { _scheme = value; }
         }
 
-        //public string CreateUrl(NavigationTarget target)
-        //{
-        //    var route = FindRoute(target);
-        //    if (route == null)
-        //    {
-        //        throw new Exception("No route for NavigationTarget: " + target.GetType().Name);
-        //    }
-
-        //    return CreateUrl(route, target);
-        //}
-
         public string CreateUrl(Route route, NavigationTarget target)
         {
             var url = Scheme + route.UrlPattern;

@@ -20,6 +20,7 @@
             <Button Margin="39,59,39,0" Click="OnBackButtonClick" Style="{StaticResource NavigationBackButtonNormalStyle}" VerticalAlignment="Top" />
             <TextBlock Text="{Binding Task.Title}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
-        <Button Content="Show Comments" Grid.Row="1" VerticalAlignment="Top" Margin="120,0,0,0" Click="OnCommentsButtonClick" />
+        <TextBlock Grid.Row="1" Style="{StaticResource BodyTextBlockStyle}" Margin="120,0,0,0" FontSize="20" Text="{Binding Comment}"/>
+        <Button Content="Show Comments" Grid.Row="1" VerticalAlignment="Top" Visibility="{Binding ShowCommentsVisibility}" Margin="120,0,0,0" Click="OnCommentsButtonClick" />
     </Grid>
 </solidNavigation:PageBase>

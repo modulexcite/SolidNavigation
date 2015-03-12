@@ -13,14 +13,23 @@ namespace SolidNavigation
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            DataContext = new TaskDetailsViewModel(((TaskDetailsTarget)Target).TaskId);
+            if (Target is TaskDetailsTarget)
+            {
+                DataContext = new TaskDetailsViewModel(((TaskDetailsTarget) Target).TaskId);
+            }
+            else
+            {
+                var target = (CommentsTarget) Target;
+                DataContext = new TaskDetailsViewModel(target.TaskId, target.Id);
+            }
+
             NavigateService.Current.MasterView.ShowTarget(e.Parameter + "");
         }
 
         private void OnCommentsButtonClick(object sender, RoutedEventArgs e)
         {
             var taskId = ((TaskDetailsTarget)Target).TaskId;
-            NavigateService.Current.Navigate(new CommentsTarget(taskId));
+            NavigateService.Current.Navigate(new CommentsTarget(taskId,45));
         }
 
         private void OnBackButtonClick(object sender, RoutedEventArgs e)

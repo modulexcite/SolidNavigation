@@ -80,9 +80,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommentsPage.xaml.cs">
-      <DependentUpon>CommentsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ListsPage.xaml.cs">
       <DependentUpon>ListsPage.xaml</DependentUpon>
     </Compile>
@@ -111,10 +108,6 @@
     <Content Include="Assets\WideLogo.scale-240.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="CommentsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="ListsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
