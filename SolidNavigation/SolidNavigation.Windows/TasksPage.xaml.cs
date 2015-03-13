@@ -1,4 +1,7 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.Foundation;
+using Windows.UI.StartScreen;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 using SolidNavigation.Sdk;
 
@@ -23,10 +26,17 @@ namespace SolidNavigation
             NavigateService.Current.GoBack();
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             var route = Router.Current.FindRoute(Target);
             var url = Router.Current.CreateUrl(route, Target);
+            var logo = new Uri("ms-appx:///Assets/Logo.png");
+
+            var target = (TaskListTarget)Target;
+
+            var secondaryTile = new SecondaryTile(Guid.NewGuid() + "", "list " + target.ListId, url, logo, TileSize.Square150x150);
+            secondaryTile.VisualElements.ShowNameOnSquare150x150Logo = true;
+            await secondaryTile.RequestCreateAsync(new Point(ActualWidth / 2, ActualHeight / 2));
         }
     }
 }
