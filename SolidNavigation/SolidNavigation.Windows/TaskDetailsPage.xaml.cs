@@ -15,21 +15,15 @@ namespace SolidNavigation
             base.OnNavigatedTo(e);
             if (Target is TaskDetailsTarget)
             {
-                DataContext = new TaskDetailsViewModel(((TaskDetailsTarget) Target).TaskId);
+                DataContext = new TaskDetailsViewModel(((TaskDetailsTarget)Target).TaskId);
             }
             else
             {
-                var target = (CommentsTarget) Target;
-                DataContext = new TaskDetailsViewModel(target.TaskId, target.Id);
+                var target = (CommentTarget)Target;
+                DataContext = new TaskDetailsViewModel(target.TaskId, target.CommentId);
             }
 
-            NavigateService.Current.MasterView.ShowTarget(e.Parameter + "");
-        }
-
-        private void OnCommentsButtonClick(object sender, RoutedEventArgs e)
-        {
-            var taskId = ((TaskDetailsTarget)Target).TaskId;
-            NavigateService.Current.Navigate(new CommentsTarget(taskId,45));
+            NavInfo.Text = e.Parameter + "\n" + Target;
         }
 
         private void OnBackButtonClick(object sender, RoutedEventArgs e)

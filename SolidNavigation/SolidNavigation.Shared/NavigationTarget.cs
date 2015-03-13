@@ -35,24 +35,25 @@ namespace SolidNavigation
         }
     }
 
-    public class CommentsTarget : NavigationTarget
+    public class CommentTarget : NavigationTarget
     {
         public long TaskId { get; set; }
-        public long Id { get; set; }
+        public long CommentId { get; set; }
 
-        public CommentsTarget(long taskId)
+        public CommentTarget(long taskId)
         {
             TaskId = taskId;
         }
-        public CommentsTarget(long taskId, long id)
+
+        public CommentTarget(long taskId, long commentId)
         {
             TaskId = taskId;
-            Id = id;
+            CommentId = commentId;
         }
 
         public override string ToString()
         {
-            return base.ToString() + "\nTaskId=" + TaskId + ", Id=" + Id;
+            return base.ToString() + "\nTaskId=" + TaskId + ", CommentId=" + CommentId;
         }
     }
 }

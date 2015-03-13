@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SolidNavigation.Sdk
+﻿namespace SolidNavigation.Sdk
 {
     public abstract class NavigationServiceBase
     {

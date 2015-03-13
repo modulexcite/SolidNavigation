@@ -8,7 +8,6 @@ namespace SolidNavigation.Sdk
 {
     public class Router
     {
-        private readonly Func<bool> _true = () => true;
         private readonly List<Route> _routes = new List<Route>();
         private string _scheme;
         private static Router _current;

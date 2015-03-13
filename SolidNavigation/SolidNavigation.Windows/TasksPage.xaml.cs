@@ -1,5 +1,6 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
+using SolidNavigation.Sdk;
 
 namespace SolidNavigation
 {
@@ -14,12 +15,18 @@ namespace SolidNavigation
         {
             base.OnNavigatedTo(e);
             DataContext = new TasksPageViewModel(((TaskListTarget)Target).ListId);
-            NavigateService.Current.MasterView.ShowTarget(e.Parameter + "");
+            NavInfo.Text = e.Parameter + "\n" + Target;
         }
 
         private void OnBackButtonClick(object sender, RoutedEventArgs e)
         {
             NavigateService.Current.GoBack();
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            var route = Router.Current.FindRoute(Target);
+            var url = Router.Current.CreateUrl(route, Target);
         }
     }
 }

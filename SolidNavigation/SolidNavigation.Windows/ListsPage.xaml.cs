@@ -13,9 +13,7 @@ namespace SolidNavigation
         {
             base.OnNavigatedTo(e);
             DataContext = new ListsPageViewModel();
-
-            var ttt = Target;
-            NavigateService.Current.MasterView.ShowTarget(e.Parameter + "");
+            NavInfo.Text = e.Parameter + "\n" + Target;
         }
     }
 }

@@ -11,6 +11,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -27,5 +28,9 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <StackPanel Grid.Row="2" Background="Green">
+            <TextBlock x:Name="NavInfo" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Margin="30" />
+            <Button HorizontalAlignment="Center" Content="Pin list to start" Click="ButtonBase_OnClick" Margin="30"/>
+        </StackPanel>
     </Grid>
 </local:PageBase>

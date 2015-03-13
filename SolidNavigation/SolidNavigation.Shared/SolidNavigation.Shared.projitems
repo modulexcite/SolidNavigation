@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CommentViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ListModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ListViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MasterView.xaml.cs">

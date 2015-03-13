@@ -9,15 +9,6 @@
     d:DesignWidth="500">
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
         <Frame x:Name="ContentFrame" />
-        <StackPanel Background="Green" Grid.Column="1" Orientation="Vertical">
-            <TextBox x:Name="AddressBox" Text="solidnavigation://tasks/2/comments?id=324" FontSize="20" Margin="30" Width="600" />
-            <Button Width="200" Margin="30,0,0,0" Click="OnGoClick" Content="Go" FontSize="20"/>
-            <TextBlock x:Name="NavInfo" FontSize="20" Margin="30" />
-        </StackPanel>
     </Grid>
 </UserControl>

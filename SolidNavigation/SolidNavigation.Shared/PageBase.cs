@@ -10,8 +10,6 @@ namespace SolidNavigation {
             base.OnNavigatedTo(e);
             var url = e.Parameter + "";
             Target = Router.Current.CreateTarget(url);
-
-            // do something with NavigationTarget
         }
     }
 }
