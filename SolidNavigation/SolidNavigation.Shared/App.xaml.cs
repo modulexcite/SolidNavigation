@@ -32,7 +32,7 @@ namespace SolidNavigation
             }
         }
 
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
             var frame = Window.Current.Content as Frame;
             if (frame == null)
@@ -41,16 +41,25 @@ namespace SolidNavigation
                 Window.Current.Content = frame;
             }
 
+            SuspensionManager.RegisterFrame(frame, "AppFrame");
+
+            if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+            {
+                await SuspensionManager.RestoreAsync();
+                Window.Current.Activate();
+                return;
+            }
             NavigateService.Current.Navigate(e.Arguments);
 
             Window.Current.Activate();
         }
 
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
 
-            // TODO: Save application state and stop any background activity
+            await SuspensionManager.SaveAsync();
+            
             deferral.Complete();
         }
     }

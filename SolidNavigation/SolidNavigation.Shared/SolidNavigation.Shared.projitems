@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)NavigationTarget.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PageBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SuspensionManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TaskModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TaskViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Workspace.cs" />
