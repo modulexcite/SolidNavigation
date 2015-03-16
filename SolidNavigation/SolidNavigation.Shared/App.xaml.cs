@@ -1,6 +1,7 @@
 ﻿using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using SolidNavigation.Sdk;
 
 namespace SolidNavigation
@@ -33,11 +34,11 @@ namespace SolidNavigation
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            var masterView = Window.Current.Content as MasterView;
-            if (masterView == null)
+            var frame = Window.Current.Content as Frame;
+            if (frame == null)
             {
-                masterView = new MasterView();
-                Window.Current.Content = masterView;
+                frame = new Frame();
+                Window.Current.Content = frame;
             }
 
             NavigateService.Current.Navigate(e.Arguments);

@@ -5,19 +5,14 @@ using SolidNavigation.Sdk;
 
 namespace SolidNavigation
 {
-    public class NavigateService:NavigationServiceBase
+    public class NavigateService : NavigationServiceBase
     {
         private static NavigateService _current;
         public static NavigateService Current { get { return _current ?? (_current = new NavigateService()); } }
 
-        public MasterView MasterView
-        {
-            get { return (MasterView)Window.Current.Content; }
-        }
-
         public Frame ContentFrame
         {
-            get { return MasterView.FindName("ContentFrame") as Frame; }
+            get { return (Frame)Window.Current.Content; }
         }
 
         public void GoBack()
@@ -34,4 +29,3 @@ namespace SolidNavigation
         }
     }
 }
-    

@@ -18,9 +18,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)CommentViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ListModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ListViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MasterView.xaml.cs">
-      <DependentUpon>MasterView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)NavigateService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NavigationTarget.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObservableObject.cs" />
@@ -28,11 +25,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)TaskModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TaskViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Workspace.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)MasterView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
 </Project>
