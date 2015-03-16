@@ -40,14 +40,8 @@ namespace SolidNavigation
                 Window.Current.Content = masterView;
             }
 
-            if (e.Arguments == "")
-            {
-                NavigateService.Current.Navigate(new HomeTarget());
-            }
-            else
-            {
-                NavigateService.Current.Navigate(e.Arguments);
-            }
+            NavigateService.Current.Navigate(e.Arguments);
+
             Window.Current.Activate();
         }
 
