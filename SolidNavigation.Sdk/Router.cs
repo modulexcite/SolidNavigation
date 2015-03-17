@@ -99,15 +99,15 @@ namespace SolidNavigation.Sdk
 
         private ConstructorInfo GetConstructor(Route route, UriInfo uriInfo)
         {
-            var segments = route.Segments.Where(x => x.IsVariable).Select(x => x.Segment.ToLower()).ToList();
+            var urlVariables = route.Segments.Where(x => x.IsVariable).Select(x => x.Segment.ToLower()).ToList();
             foreach (var qs in uriInfo.QueryString)
             {
-                segments.Add(qs.Key);
+                urlVariables.Add(qs.Key);
             }
             var constructors = route.TargetType.GetTypeInfo().DeclaredConstructors;
             foreach (var constructor in constructors)
             {
-                if (IsParameterMatch(constructor.GetParameters(), segments))
+                if (IsParameterMatch(constructor.GetParameters(), urlVariables))
                 {
                     return constructor;
                 }
