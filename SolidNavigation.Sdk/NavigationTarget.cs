@@ -12,8 +12,7 @@ namespace SolidNavigation.Sdk
 
         public override int GetHashCode()
         {
-            var route = Router.Current.FindRoute(this);
-            var url = Router.Current.CreateUrl(route, this);
+            var url = Router.Current.CreateUrl(this);
             return url.GetHashCode();
         }
 

@@ -28,8 +28,8 @@ namespace SolidNavigation
 
         private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var route = Router.Current.FindRoute(Target);
-            var url = Router.Current.CreateUrl(route, Target);
+           // var route = Router.Current.FindRoute(Target);
+            var url = Router.Current.CreateUrl(Target);
             var logo = new Uri("ms-appx:///Assets/Logo.png");
 
             var target = (TaskListTarget)Target;

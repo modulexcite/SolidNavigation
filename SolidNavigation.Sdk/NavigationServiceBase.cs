@@ -5,7 +5,7 @@
         public void Navigate(NavigationTarget target)
         {
             var route = Router.Current.FindRoute(target);
-            var url = Router.Current.CreateUrl(route, target);
+            var url = Router.Current.CreateUrl(target);
             Navigate(route, target, url);
         }
 

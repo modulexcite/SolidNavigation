@@ -15,6 +15,10 @@ namespace SolidNavigation.Sdk
 
         public void AddRoute(string urlPattern, Type pageType, Type targetType)
         {
+            if (_routes.Any(x => x.TargetType == targetType))
+            {
+                throw new Exception("Targettypes must be unique. Routes already contains " + pageType.Name);
+            }
             _routes.Add(new Route(urlPattern, pageType, targetType));
         }
 
@@ -31,8 +35,9 @@ namespace SolidNavigation.Sdk
             set { _scheme = value; }
         }
 
-        public string CreateUrl(Route route, NavigationTarget target)
+        public string CreateUrl(NavigationTarget target)
         {
+            var route = FindRoute(target);
             var url = Scheme + route.UrlPattern;
             var props = target.GetType().GetPropertiesHierarchical();
             var routeVars = route.Segments.Where(x => x.IsVariable).Select(x => x.Segment.ToLower());
@@ -68,8 +73,7 @@ namespace SolidNavigation.Sdk
 
             if (cons == null)
             {
-                // no matching constructor for NavigationTarget
-                return null;
+                throw new Exception("Closest match (" + route.TargetType.Name + ") does not contain a constructor that matches url " + url);
             }
 
             var ctorparams = cons.GetParameters();
