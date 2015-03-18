@@ -13,13 +13,14 @@ namespace SolidNavigation.Sdk
         private static Router _current;
         public static Router Current { get { return _current ?? (_current = new Router()); } }
 
-        public void AddRoute(string urlPattern, Type pageType, Type targetType)
+        public Router AddRoute(string urlPattern, Type pageType, Type targetType)
         {
             if (_routes.Any(x => x.TargetType == targetType))
             {
                 throw new Exception("Targettypes must be unique. Routes already contains " + pageType.Name);
             }
             _routes.Add(new Route(urlPattern, pageType, targetType));
+            return this;
         }
 
         public string Scheme
