@@ -41,18 +41,18 @@ namespace SolidNavigation.Sdk
             var route = FindRoute(target);
             var url = Scheme + route.UrlPattern;
             var props = target.GetType().GetPropertiesHierarchical();
-            var routeVars = route.Segments.Where(x => x.IsVariable).Select(x => x.Segment.ToLower());
+            var routeVars = route.Segments.Where(x => x.IsVariable).Select(x => x.Name.ToLowerInvariant());
             foreach (var prop in props)
             {
                 var value = Uri.EscapeDataString(prop.GetValue(target) + "");
-                if (routeVars.Contains(prop.Name.ToLower()))
+                if (routeVars.Contains(prop.Name.ToLowerInvariant()))
                 {
-                    url = url.Replace("{" + prop.Name.ToLower() + "}", value);
+                    url = url.Replace("{" + prop.Name.ToLowerInvariant() + "}", value);
                 }
                 else if (prop.PropertyType == typeof(string) || prop.PropertyType.GetTypeInfo().IsValueType)
                 {
                     url += url.Contains("?") ? "&" : "?";
-                    url += prop.Name.ToLower() + "=" + value;
+                    url += prop.Name.ToLowerInvariant() + "=" + value;
                 }
             }
             return url;
@@ -68,30 +68,25 @@ namespace SolidNavigation.Sdk
             var uriInfo = new UriInfo(url);
             var route = FindRoute(uriInfo.Path);
 
-            var parameterValues = new List<object>();
+            if (route == null)
+            {
+                throw new Exception("Could not find a route for '" + url + "'.");
+            }
 
-            var cons = GetConstructor(route, uriInfo);
+            var parameters = ExtractParameters(route, uriInfo);
+            var cons = GetConstructor(route.TargetType, parameters);
 
             if (cons == null)
             {
-                throw new Exception("Closest match (" + route.TargetType.Name + ") does not contain a constructor that matches url " + url);
+                throw new Exception("Could not find a constructor in type " + route.TargetType.Name + " that matches '" + url + "'.");
             }
 
             var ctorparams = cons.GetParameters();
-            var counter = 0;
-            for (int i = 0; i < route.Segments.Count; i++)
+            var parameterValues = ctorparams.Select(p =>
             {
-                if (route.Segments[i].IsVariable)
-                {
-                    parameterValues.Add(ChangeType(uriInfo.Segments[i], ctorparams[counter].ParameterType));
-                    counter++;
-                }
-            }
-            foreach (var qs in uriInfo.QueryString)
-            {
-                parameterValues.Add(ChangeType(qs.Value, ctorparams[counter].ParameterType));
-                counter++;
-            }
+                var value = parameters[p.Name.ToLowerInvariant()];
+                return ChangeType(value, p.ParameterType);
+            });
 
             var target = cons.Invoke(parameterValues.ToArray()) as NavigationTarget;
             return target;
@@ -102,17 +97,15 @@ namespace SolidNavigation.Sdk
             return Convert.ChangeType(Uri.UnescapeDataString(value), type);
         }
 
-        private ConstructorInfo GetConstructor(Route route, UriInfo uriInfo)
+        private ConstructorInfo GetConstructor(Type type, Dictionary<string, string> parameters)
         {
-            var urlVariables = route.Segments.Where(x => x.IsVariable).Select(x => x.Segment.ToLower()).ToList();
-            foreach (var qs in uriInfo.QueryString)
-            {
-                urlVariables.Add(qs.Key);
-            }
-            var constructors = route.TargetType.GetTypeInfo().DeclaredConstructors;
+            var parameterNames = parameters.Select(p => p.Key).ToList();
+            var constructors = type.GetTypeInfo().DeclaredConstructors
+                .OrderByDescending(c => c.GetParameters().Count());
+
             foreach (var constructor in constructors)
             {
-                if (IsParameterMatch(constructor.GetParameters(), urlVariables))
+                if (IsParameterMatch(constructor.GetParameters(), parameterNames))
                 {
                     return constructor;
                 }
@@ -120,13 +113,26 @@ namespace SolidNavigation.Sdk
             return null;
         }
 
-        private static bool IsParameterMatch(ParameterInfo[] ctorParameters, List<string> parameterNames)
+        private Dictionary<string, string> ExtractParameters(Route route, UriInfo uriInfo)
         {
-            if (ctorParameters.Count() != parameterNames.Count)
+            var parameters = new Dictionary<string, string>();
+            for (int i = 0; i < route.Segments.Count; i++)
             {
-                return false;
+                if (route.Segments[i].IsVariable)
+                {
+                    parameters.Add(route.Segments[i].Name.ToLowerInvariant(), uriInfo.Segments[i]);
+                }
             }
-            return ctorParameters.All(ctorParameter => parameterNames.Contains(ctorParameter.Name.ToLower()));
+            foreach (var qs in uriInfo.QueryString)
+            {
+                parameters.Add(qs.Key.ToLowerInvariant(), qs.Value);
+            }
+            return parameters;
+        }
+
+        private static bool IsParameterMatch(IEnumerable<ParameterInfo> ctorParameters, List<string> parameterNames)
+        {
+            return ctorParameters.All(p => parameterNames.Contains(p.Name.ToLowerInvariant()));
         }
 
         public Route FindRoute(NavigationTarget target)

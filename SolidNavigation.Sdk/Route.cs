@@ -38,11 +38,11 @@ namespace SolidNavigation.Sdk
                 {
                     if (segment.StartsWith("{") && segment.EndsWith("}"))
                     {
-                        segments.Add(new UrlSegment { Segment = segment.Replace("{", "").Replace("}", ""), IsVariable = true });
+                        segments.Add(new UrlSegment { Name = segment.Replace("{", "").Replace("}", ""), IsVariable = true });
                     }
                     else
                     {
-                        segments.Add(new UrlSegment { Segment = segment });
+                        segments.Add(new UrlSegment { Name = segment });
                     }
                 }
                 return segments;
@@ -50,10 +50,10 @@ namespace SolidNavigation.Sdk
         }
     }
 
-    [DebuggerDisplay("Segment: {Segment}, IsVariable: {IsVariable}")]
+    [DebuggerDisplay("Name: {Name}, IsVariable: {IsVariable}")]
     public class UrlSegment
     {
-        public string Segment { get; set; }
+        public string Name { get; set; }
         public bool IsVariable { get; set; } // determined if segment contains { and }
     }
 }

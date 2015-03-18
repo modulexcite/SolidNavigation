@@ -97,6 +97,29 @@ namespace SolidNavigation.Test
             Assert.AreEqual(2, info.Segments.Count);
         }
 
+        [TestMethod]
+        public void Unexpected_uri_parameters_should_be_ignored()
+        {
+            var router = CreateRouter().AddRoute("lists/{listid}", null, typeof(TaskListTarget));
+
+            var target = router.CreateTarget("test://lists/123?foo=bar");
+
+            Assert.IsInstanceOfType(target, typeof(TaskListTarget));
+            Assert.AreEqual(123, ((TaskListTarget)target).ListId);
+        }
+
+        [TestMethod]
+        public void When_uri_matches_more_than_one_constructor_it_should_pick_the_one_with_more_parameters()
+        {
+            var router = CreateRouter().AddRoute("tasks/{taskid}/comments", null, typeof(CommentTarget));
+
+            var target = router.CreateTarget("test://tasks/123/comments?commentId=25");
+
+            Assert.IsInstanceOfType(target, typeof(CommentTarget));
+            Assert.AreEqual(123, ((CommentTarget)target).TaskId);
+            Assert.AreEqual(25, ((CommentTarget)target).CommentId);
+        }
+
         private static Router CreateRouter()
         {
             return new Router { Scheme = "test://" };
