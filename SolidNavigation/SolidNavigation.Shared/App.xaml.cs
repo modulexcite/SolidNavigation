@@ -41,10 +41,6 @@ namespace SolidNavigation
             if (args.Kind == ActivationKind.Protocol)
             {
                 var protocolArgs = (ProtocolActivatedEventArgs)args;
-                if (protocolArgs.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    await SuspensionManager.RestoreAsync();
-                }
                 NavigateService.Current.Navigate(protocolArgs.Uri + "");
             }
 
