@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using SolidNavigation.Sdk;
+using SolidNavigation.Windows.Navigation;
 
 namespace SolidNavigation.Test
 {
